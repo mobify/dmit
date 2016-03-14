@@ -1,0 +1,11 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/erikwilson/docker-machine-unfs.git
+	branch = master
+	commit = c5421b39dfb20def1dad16ce1561838542822b6c
+	parent = c867a53b87c3dae75787278fbfc6b544286ee6ff
+	cmdver = 0.3.0
