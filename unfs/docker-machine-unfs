@@ -165,8 +165,8 @@ parseCli()
         local shared_folder="${i#*=}"
         shift
 
-        if [ ! -d "$shared_folder" ]; then
-          echoError "Given shared folder '$shared_folder' does not exist!"
+        if [ ! -d "${shared_folder%:*}" ]; then
+          echoError "Given shared folder '${shared_folder%:*}' does not exist!"
           exit 1
         fi
 
@@ -224,8 +224,8 @@ parseCli()
     if [[ "$shared_folder" != "*:*" ]]; then
       shared_folder="$shared_folder:$shared_folder"
     fi
-    echoProperties "Shared Folder: ${shared_folder#*:}"
-    echoProperties "Shared Mount: ${shared_folder%:*}"
+    echoProperties "Shared Folder: ${shared_folder%:*}"
+    echoProperties "Shared Mount: ${shared_folder#*:}"
   done
 
   echoProperties "Mount Options: $prop_mount_options"
@@ -364,9 +364,9 @@ configureNFS()
   (
     for shared_folder in "${prop_shared_folders[@]}"
     do
-      echo "${shared_folder#*:} $prop_machine_ip($prop_nfs_config)"$'\n'
+      echo "${shared_folder%:*} $prop_machine_ip($prop_nfs_config)"$'\n'
     done
-  ) >$prop_exports
+  ) | sort | uniq >$prop_exports
 
   export PATH=$PATH:/usr/sbin:/usr/local/sbin/
   if unfsd -T -e $prop_exports; then
@@ -396,13 +396,13 @@ configureRancherOS()
   local mountshdir=''
   for shared_folder in "${prop_shared_folders[@]}"
   do
-    mountshdir+="sudo mkdir -p '${shared_folder%:*}'"$'\n'
+    mountshdir+="      sudo mkdir -p '${shared_folder#*:}'"$'\n'
   done
 
   local mountsh=''
   for shared_folder in "${prop_shared_folders[@]}"
   do
-    mountsh+="timeout -t 3 mount -t nfs -o '$prop_mount_options' '$prop_nfshost_ip:${shared_folder#*:}' '${shared_folder%:*}'"$'\n'
+    mountsh+="      mount -t nfs -o '$prop_mount_options' '$prop_nfshost_ip:${shared_folder%:*}' '${shared_folder#*:}'"$'\n'
   done
 
 cloud_config_tmp_path="$(mktemp)"
@@ -424,12 +424,12 @@ write_files:
         apt-get update -qq && apt-get install -y nfs-common
       fi
       rpcbind
-      $mountshdir
-      $mountsh
+$(echo -e "$mountshdir" | uniq)
+$(echo -e "$mountsh" | uniq)
 CLOUD_CONFIG
 
-     docker-machine scp $cloud_config_tmp_path $prop_machine_name:/tmp/nfs.sh >/dev/null 2>&1
-     docker-machine ssh $prop_machine_name 'sudo ros config merge < /tmp/nfs.sh' >/dev/null 2>&1
+     docker-machine scp $cloud_config_tmp_path $prop_machine_name:/tmp/nfs.sh #>/dev/null 2>&1
+     docker-machine ssh $prop_machine_name 'sudo ros config merge < /tmp/nfs.sh; sync; sync' #>/dev/null 2>&1
      echoSuccess "OK"
 }
 
@@ -466,7 +466,7 @@ configureBoot2Docker()
 
   for shared_folder in "${prop_shared_folders[@]}"
   do
-    umountsh+="sudo timeout -t 3 umount -l -f '${shared_folder%:*}'"$'\n'
+    umountsh+="sudo timeout -t 3 umount -l -f '${shared_folder#*:}'"$'\n'
   done
 
   local mountsh_file="/var/lib/boot2docker/nfs/mount.sh"
@@ -503,7 +503,6 @@ restartDockerMachine()
 
   docker-machine restart $prop_machine_name > /dev/null
 
-  exit 1
   echoSuccess "OK"
 }
 
@@ -529,8 +528,8 @@ isNFSMounted()
 {
   for shared_folder in "${prop_shared_folders[@]}"
   do
-    local nfs_mount=$(docker-machine ssh $prop_machine_name "sudo timeout -t 3 df" |
-      grep "$prop_nfshost_ip:${shared_folder#*:}")
+    local nfs_mount=$(docker-machine ssh $prop_machine_name "sudo mount" |
+      grep "$prop_nfshost_ip:${shared_folder%:*}")
     if [ "" = "$nfs_mount" ]; then
       echo "false";
       return;
