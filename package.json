@@ -11,14 +11,12 @@
   "dependencies": {
     "appdirectory": "^0.1.0",
     "async": "^1.5.2",
-    "bunyan": "^1.7.1",
     "cmdln": "^3.5.3",
     "exec-sh": "^0.2.0",
     "interactive-command": "^1.0.0",
     "nconf": "^0.8.4",
     "nconf-toml": "0.0.1",
-    "nodedm": "^0.2.2",
-    "which": "^1.2.4"
+    "nodedm": "^0.2.2"
   },
   "devDependencies": {
     "tap": "^5.7.0"
