@@ -28,6 +28,8 @@ dmit currently requires the following from homebrew:
 * `brew cask install virtualbox-extension-pack`
 * `brew install docker-machine`
 
+Don't forget to `npm install .` in the repo directory!
+
 For now, you can use dmit from github, but in time it will be made available
 on npm
 
