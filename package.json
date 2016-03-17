@@ -1,6 +1,6 @@
 {
   "name": "dmit",
-  "version": "1.0.0-alpha.0",
+  "version": "1.0.0-alpha.1",
   "description": "Wrapper for docker-machine with built-in NFS and environment handling",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,8 @@
     "interactive-command": "^1.0.0",
     "nconf": "^0.8.4",
     "nconf-toml": "0.0.1",
-    "nodedm": "^0.2.2"
+    "nodedm": "^0.2.2",
+    "mkdirp": "^0.5.1"
   },
   "keywords": [ "docker", "docker-machine", "nfs", "volumes", "rancher", "rancheros" ],
   "homepage": "https://github.com/mobify/dmit",
