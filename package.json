@@ -1,24 +1,29 @@
 {
   "name": "dmit",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.0-alpha.0",
+  "description": "Wrapper for docker-machine with built-in NFS and environment handling",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Scott McWhirter @ Mobify Inc. (https://mobify.com)",
+  "license": "MIT",
   "dependencies": {
     "appdirectory": "^0.1.0",
     "async": "^1.5.2",
     "cmdln": "^3.5.3",
-    "exec-sh": "^0.2.0",
     "interactive-command": "^1.0.0",
     "nconf": "^0.8.4",
     "nconf-toml": "0.0.1",
     "nodedm": "^0.2.2"
   },
-  "devDependencies": {
-    "tap": "^5.7.0"
-  }
+  "keywords": [ "docker", "docker-machine", "nfs", "volumes", "rancher", "rancheros" ],
+  "homepage": "https://github.com/mobify/dmit",
+  "bugs": {
+    "url": "https://github.com/mobify/dmit"
+  },
+  "bin": { "dmit": "./bin/dmit" },
+  "repository": "mobify/dmit",
+  "os" : [ "darwin" ],
+  "preferGlobal": true
 }
