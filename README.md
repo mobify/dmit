@@ -31,7 +31,7 @@ dmit currently requires the following from homebrew:
 * `brew install unfs3`
 * `brew cask install virtualbox`
 * `brew cask install virtualbox-extension-pack`
-* `brew install docker-machine`
+* `brew install docker-machine` NB: Please use docker-machine version 0.6.0
 
 Don't forget to `npm install .` in the repo directory!
 
